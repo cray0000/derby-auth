@@ -61,7 +61,8 @@ logout = (req, res) ->
   res.redirect "/"
 
 sendMailgun = (mailData, key, domain) ->
-  mailgun ?= require('mailgun-js') key, domain
+  mailgun ?= require('mailgun-js') key,
+      domain
   mailgun.messages.send mailData
   , (err, response, body) ->
     console.log body
