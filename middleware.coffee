@@ -7,6 +7,7 @@ utils = require("./utils.coffee")
 nodemailer = require("nodemailer")
 
 opts = undefined
+mailgun = undefined
 
 ###
 Utility functions
@@ -58,6 +59,12 @@ logout = (req, res) ->
   delete req.session.userId
   req.logout()
   res.redirect "/"
+
+sendMailgun = (mailData, key, domain) ->
+  mailgun ?= require('mailgun-js') key, domain
+  mailgun.messages.send mailData
+  , (err, response, body) ->
+    console.log body
 
 sendEmail = (mailData) ->
   unless (opts and opts.smtp.service and opts.smtp.user and opts.smtp.pass)
@@ -335,12 +342,20 @@ setupStaticRoutes = (expressApp, strategies) ->
       req._isServer = true # our bypassing of session-based accessControl
       model.set "auths.#{auth.id}.local.salt", salt
       model.set "auths.#{auth.id}.local.hashed_password", hashed_password
-      sendEmail
+
+      mailData =
         from: "#{opts.site.name} <#{opts.site.email}>"
         to: email
         subject: "Password Reset for #{opts.site.name}"
         text: "Password for " + auth.local[opts.passport.usernameField] + " has been reset to " + newPassword + ". Log in at #{opts.site.domain}"
         html: "Password for <strong>" + auth.local[opts.passport.usernameField]+ "</strong> has been reset to <strong>" + newPassword + "</strong>. Log in at #{opts.site.domain}"
+
+      mailgunKey = opts.mailgun.key
+      mailgunDomain = opts.mailgun.domain
+      if mailgunKey? and mailgunKeyisnt ""
+        sendMailgun(mailData, mailgunKey, mailgunDomain)
+      else
+        sendEmail(mailData)
 
       res.send "New password sent to " + email
 
