@@ -61,8 +61,7 @@ logout = (req, res) ->
   res.redirect "/"
 
 sendMailgun = (mailData, key, domain) ->
-  mailgun ?= require('mailgun-js') key,
-      domain
+  mailgun ?= require('mailgun-js') key, domain
   mailgun.messages.send mailData
   , (err, response, body) ->
     console.log body
@@ -353,7 +352,7 @@ setupStaticRoutes = (expressApp, strategies) ->
 
       mailgunKey = opts.mailgun.key
       mailgunDomain = opts.mailgun.domain
-      if mailgunKey? and mailgunKeyisnt ""
+      if mailgunKey? and mailgunKey isnt ""
         sendMailgun(mailData, mailgunKey, mailgunDomain)
       else
         sendEmail(mailData)
