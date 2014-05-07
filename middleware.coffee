@@ -288,10 +288,11 @@ setupStaticRoutes = (expressApp, strategies) ->
         req.flash 'error', "That "+opts.passport.usernameField+" is already registered"
         return res.redirect(opts.passport.failureRedirect)
 
-      currUser = $currUser.get()
-      if currUser?.local?[opts.passport.usernameField]
-        req.flash 'error', "You are already registered"
-        return res.redirect(opts.passport.failureRedirect)
+#      This allows to register another user by existing user (admin) with session info
+#      currUser = $currUser.get()
+#      if currUser?.local?[opts.passport.usernameField]
+#        req.flash 'error', "You are already registered"
+#        return res.redirect(opts.passport.failureRedirect)
 
       # Legit, register
       salt = utils.makeSalt()
@@ -317,6 +318,8 @@ setupStaticRoutes = (expressApp, strategies) ->
       sendMailgun(mailData, mailgunKey, mailgunDomain)
 
       register $currUser, 'local', localAuth, req, res, next
+
+      res.redirect "/"
 
   _.each strategies, (strategy, name) ->
     params = strategy.params or {}
