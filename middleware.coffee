@@ -32,6 +32,7 @@ login = (user, req, res, done) ->
   {done}
 ###
 register = ($user, strategy, data, req, res, done) ->
+  console.log data
   cb = ->
     if opts.passport.registerCallback
       opts.passport.registerCallback req, res, $user.get(), (->login $user.get(), req, res, done)
@@ -273,6 +274,7 @@ setupStaticRoutes = (expressApp, strategies) ->
   #          res.redirect "/users/" + user.username
 
   expressApp.post "/register", (req, res, next) ->
+    console.log "inside register"
     model = req.getModel()
 
     authQuery = $limit: 1
@@ -301,6 +303,19 @@ setupStaticRoutes = (expressApp, strategies) ->
 
       # Allows for login fields to be something other than username or email
       localAuth[opts.passport.usernameField] = req.body[opts.passport.usernameField]
+
+      # Email user about registration via mailgun
+      mailData =
+        from: "#{opts.site.name} <#{opts.site.email}>"
+        to: req.body.email
+        subject: "#{opts.site.name}"
+        text: "Password for " + req.body.username + " is " + req.body.password+ ". Log in at #{opts.site.domain}"
+
+      mailgunKey = opts.mailgun.key
+      mailgunDomain = opts.mailgun.domain
+
+      sendMailgun(mailData, mailgunKey, mailgunDomain)
+
       register $currUser, 'local', localAuth, req, res, next
 
   _.each strategies, (strategy, name) ->
