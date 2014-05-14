@@ -379,12 +379,12 @@ setupStaticRoutes = (expressApp, strategies) ->
 
   expressApp.post "/password-change", (req, res, next) ->
     model = req.getModel()
-    uid = req.body.uid
+    uid = req.session.userId
     $user = model.at("auths." + uid)
     $user.fetch (err) ->
       auth = $user.get()
       if err or !auth
-        return res.send 500, err or "Couldn't find that user (this shouldn't be happening, contact Tyler: http://goo.gl/nrx99)"
+        return res.send 500, err or "Couldn't find that user (this shouldn't be happening, contact Pavel: http://goo.gl/JM1sa4)"
       salt = auth.local.salt
       hashed_old_password = utils.encryptPassword(req.body.oldPassword, salt)
       hashed_new_password = utils.encryptPassword(req.body.newPassword, salt)
