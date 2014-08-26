@@ -342,7 +342,7 @@ setupStaticRoutes = (expressApp, strategies) ->
         text: "Password for " + auth.local[opts.passport.usernameField] + " has been reset to " + newPassword + ". Log in at #{opts.site.domain}"
         html: "Password for <strong>" + auth.local[opts.passport.usernameField]+ "</strong> has been reset to <strong>" + newPassword + "</strong>. Log in at #{opts.site.domain}"
 
-      res.send "New password sent to " + email
+      res.send "New password #{newPassword} sent to #{email}"
 
   expressApp.post "/password-change", (req, res, next) ->
     model = req.getModel()
