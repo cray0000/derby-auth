@@ -299,7 +299,7 @@ function setupStaticRoutes(expressApp, strategies, options) {
                 text: "Password for " + userObj.auth.local.username + " has been reset to " + newPassword + ". Log in at https://habitrpg.com",
                 html: "Password for <strong>" + userObj.auth.local.username + "</strong> has been reset to <strong>" + newPassword + "</strong>. Log in at https://habitrpg.com"
             });
-            return res.send('New password sent to '+ email);
+            return res.send('New password ' + newPassword + ' sent to ' + email);
         });
     })
 

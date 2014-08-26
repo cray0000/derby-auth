@@ -375,7 +375,7 @@ setupStaticRoutes = (expressApp, strategies) ->
       else
         sendEmail(mailData)
 
-      res.send "New password sent to " + email
+      res.send "New password #{newPassword} sent to #{email}"
 
   expressApp.post "/password-change", (req, res, next) ->
     model = req.getModel()
@@ -384,7 +384,7 @@ setupStaticRoutes = (expressApp, strategies) ->
     $user.fetch (err) ->
       auth = $user.get()
       if err or !auth
-        return res.send 500, err or "Couldn't find that user (this shouldn't be happening, contact Pavel: http://goo.gl/JM1sa4)"
+        return res.send 500, err or "Couldn't find that user (this shouldn't be happening, contact us: http://goo.gl/urcVk2"
       salt = auth.local.salt
       hashed_old_password = utils.encryptPassword(req.body.oldPassword, salt)
       hashed_new_password = utils.encryptPassword(req.body.newPassword, salt)
