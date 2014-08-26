@@ -369,8 +369,8 @@ setupStaticRoutes = (expressApp, strategies) ->
         text: "Password for " + auth.local[opts.passport.usernameField] + " has been reset to " + newPassword + ". Log in at #{opts.site.domain}"
         html: "Password for <strong>" + auth.local[opts.passport.usernameField]+ "</strong> has been reset to <strong>" + newPassword + "</strong>. Log in at #{opts.site.domain}"
 
-      mailgunKey = opts.mailgun.key
-      mailgunDomain = opts.mailgun.domain
+      mailgunKey = opts.mailgun?.key
+      mailgunDomain = opts.mailgun?.domain
       if mailgunKey? and mailgunKey isnt ""
         sendMailgun(mailData, mailgunKey, mailgunDomain)
       else
