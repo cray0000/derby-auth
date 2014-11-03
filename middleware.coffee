@@ -324,12 +324,17 @@ setupStaticRoutes = (expressApp, strategies) ->
   _.each strategies, (strategy, name) ->
     params = strategy.params or {}
 
+    # it for lti
+    expressApp.post "/auth/#{name}", passport.authenticate(name, opts.passport), (req, res) ->
+      res.redirect(opts.passport.successRedirect)
+
     # GET /auth/facebook
     #   Use passport.authenticate() as route middleware to authenticate the
     #   request.  The first step in Facebook authentication will involve
     #   redirecting the user to facebook.com.  After authorization, Facebook will
     #   redirect the user back to this application at /auth/facebook/callback
     expressApp.get "/auth/#{name}", passport.authenticate(name, params), (req, res) ->
+
       # The request will be redirected to Facebook for authentication, so this
       # function will not be called.
 
