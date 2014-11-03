@@ -326,7 +326,11 @@ setupStaticRoutes = (expressApp, strategies) ->
 
     # it for lti
     expressApp.post "/auth/#{name}", passport.authenticate(name, opts.passport), (req, res) ->
-      res.redirect(opts.passport.successRedirect)
+      if req.query.redirect
+        res.redirect(req.query.redirect)
+      else
+        res.redirect(options.passport.successRedirect)
+
 
     # GET /auth/facebook
     #   Use passport.authenticate() as route middleware to authenticate the
