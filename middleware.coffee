@@ -329,7 +329,7 @@ setupStaticRoutes = (expressApp, strategies) ->
       if req.query.redirect
         res.redirect(req.query.redirect)
       else
-        res.redirect(options.passport.successRedirect)
+        res.redirect(opts.passport.successRedirect)
 
 
     # GET /auth/facebook
